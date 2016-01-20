@@ -30,7 +30,7 @@ using namespace std;
 //%template(vecGSTbasePtr) vector<GSTbase *>;
 %template(vecPathXSeries) vector<PathXSeries>;
 //%include "visuals/gst.h"
-%include "pits/toolshape.h"
+#%include "pits/toolshape.h"
 %include "pits/CoreRoughGeneration.h"
 %template(vecP2) vector<P2>;
 %template(vecint) vector<int>;
@@ -39,8 +39,8 @@ using namespace std;
 %include "cages/SurfXboxed.h"
 %include "cages/S2weave.h"
 %include "cages/Area2_gen.h"
-%include "visuals/fsvtkToolpathMapper.h"
-%include "visuals/MakeToolpath.h"
+#%include "visuals/fsvtkToolpathMapper.h"
+#%include "visuals/MakeToolpath.h"
 
-%include "FreesteelPython.h"
+#%include "FreesteelPython.h"
 

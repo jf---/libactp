@@ -104,15 +104,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
       ${SOURCES_files_xenon}
     )
 
-
-
-  set(pyfreesteel
-    freesteel-python.cpp
-    freesteel-python.h
-    freesteel-python_wrap.cxx
-  )
-
- set(freesteel
+ set(freesteel_src
     ${SOURCES_bolts}
     ${SOURCES_cages}
     ${SOURCES_pits}
@@ -125,9 +117,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
     add_library(
       freesteel
-      #MODULE
       STATIC
-      ${freesteel}
+      ${freesteel_src}
     )
 
     target_include_directories(freesteel PRIVATE
@@ -135,96 +126,38 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
     )
 
 
-#include_directories(BEFORE ${PROJECT_SOURCE_DIR})
+  set(SOURCES_files_python_actp
+    freesteel-python.cpp
+    freesteel-python.h
+    freesteel-python_wrap.cxx
+  )
+
+    source_group("actp_SOURCE" FILES ${SOURCES_files_python_actp})
+
+    set(SOURCES_actp
+      ${SOURCES_files_python_actp}
+    )
+
+
+
+#    set(actp
+#        #${Boost_LIBRARIES}
+#        ${PYTHON_LIBRARIES}
+#        freesteel
+#    )
 #
-##include(${V2C_HOOK_POST_SOURCES} OPTIONAL)
+    add_library(
+      actp
+      MODULE
+      ${SOURCES_actp}
+      #${PYTHON_LIBRARIES}
+
+    )
+
+    target_include_directories(actp PRIVATE
+      ${CMAKE_CURRENT_SOURCE_DIR}/python
+    )
+
+#    # add python
+#    target_link_libraries(actp ${actp_libs})
 #
-##if(TARGET freesteel-python)
-##
-##  set_property(TARGET freesteel-python APPEND PROPERTY COMPILE_DEFINITIONS_DEBUG
-##    FREESTEELPYTHON_EXPORTS
-##    MDEBUG
-##    WIN32
-##    WINVER=0x400
-##    WXDEBUG=1
-##    WXUSINGDLL=1
-##    _DEBUG
-##    _MT
-##    _USRDLL
-##    _WINDOWS
-##    __WXDEBUG__
-##    wxUSE_GUI=1
-##  )
-##endif(TARGET freesteel-python)
-#
-#if(CMAKE_CONFIGURATION_TYPES OR CMAKE_BUILD_TYPE STREQUAL "Release")
-#
-#  include_directories(
-#    #$(VTK)
-#    #$(VTK)/Common
-#    #$(VTK)/Filtering
-#    #$(VTK)/Graphics
-#    #$(VTK)/Hybrid
-#    #$(VTK)/IO
-#    #$(VTK)/Imaging
-#    #$(VTK)/Patented
-#    #$(VTK)/Rendering
-#    #$(WXWINDOWS)/include
-#    #$(WXWINDOWS)/lib/mswdll
-#    src
-#  )
-#
-#  # hook include after all definitions have been made
-#  # (but _before_ target is created using the source list!)
-#  include(${V2C_HOOK_POST_DEFINITIONS} OPTIONAL)
-#
-#  set(SOURCES
-#    ${SOURCES_}
-#    #${V2C_SOURCES}
-#  )
-#
-##  link_directories(
-##    #$(VTK)/bin/Release
-##    #$(WXWINDOWS)/lib
-##    ${V2C_LIB_DIRS}
-##  )
-#
-#  add_library( freesteel-python SHARED ${SOURCES} )
-#
-#  target_link_libraries(freesteel-python
-#    #wxmsw24
-#    #vtkCommon
-#    #vtkRendering
-#    #vtkGraphics
-#    #vtkFiltering
-#    #vtkIO
-#    #vtkImaging
-#    #odbc32
-#    #odbccp32
-#    #comctl32
-#    #rpcrt4
-#    #wsock32
-#    #opengl32
-#    ${V2C_LIBS}
-#  )
-#
-#  # e.g. to be used for tweaking target properties etc.
-#  include(${V2C_HOOK_POST_TARGET} OPTIONAL)
-#endif(CMAKE_CONFIGURATION_TYPES OR CMAKE_BUILD_TYPE STREQUAL "Release")
-#if(TARGET freesteel-python)
-#
-#  set_property(TARGET freesteel-python APPEND PROPERTY COMPILE_DEFINITIONS_RELEASE
-#    FREESTEELPYTHON_EXPORTS
-#    #NDEBUG
-#    #WIN32
-#    #_USRDLL
-#    #_WINDOWS
-#  )
-#endif(TARGET freesteel-python)
-#
-##set_property(TARGET freesteel-python PROPERTY PROJECT_LABEL "freesteel-python")
-##set_property(TARGET freesteel-python PROPERTY VS_KEYWORD "Win32Proj")
-#
-##v2c_rebuild_on_update(freesteel-python "${CMAKE_CURRENT_SOURCE_DIR}/freesteel-python.vcproj" ${CMAKE_CURRENT_LIST_FILE} "/Users/jelleferinga/GIT/vcproj2cmake-code/scripts/vcproj2cmake.rb" ".")
-#
-##include(${V2C_HOOK_POST} OPTIONAL)
