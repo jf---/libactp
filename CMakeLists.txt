@@ -128,7 +128,7 @@ set(SOURCES_python
 #source_group("xenon" FILES ${SOURCES_files_xenon})
 
 
-# Build lib
+# Build libactp
 
 #add_library(
 #        freesteel
@@ -145,72 +145,35 @@ set(SOURCES_python
 
 
 
-FIND_PACKAGE(PythonLibs)
+find_package(PythonLibs)
+find_package(PythonInterp)
 
-IF(PYTHONLIBS_FOUND)
 
-    INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
+execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "from __future__ import print_function; from distutils.sysconfig import get_python_lib; import os;print(get_python_lib())" OUTPUT_VARIABLE python_lib OUTPUT_STRIP_TRAILING_WHITESPACE )
+set(ACTP_INSTALL_DIRECTORY ${python_lib} CACHE PATH "ACTP install directory" )
+set(BUILD_DIR ${CMAKE_BINARY_DIR}/${LIBRARY_OUTPUT_PATH})
 
-    add_library(
-        actp
-        #STATIC
-        SHARED
-        #${PYTHON_INCLUDE_DIRS}
-        "/Users/jelleferinga/miniconda/include/python2.7"
-        ${SOURCES_python}
-        ${freesteel_src}
+INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
+
+add_library(
+    actp
+    SHARED
+    ${SOURCES_python}
+    ${freesteel_src}
 )
 
-    message(STATUS "PYTHON_LIBRARIES={${PYTHON_LIBRARIES}}")
-    message(STATUS "PYTHON_INCLUDE_DIRS={${PYTHON_INCLUDE_DIRS}}")
+# libactp -> actp
+set_target_properties(actp PROPERTIES PREFIX "")
+# actp.dylib -> actp.so
+set_target_properties(actp PROPERTIES SUFFIX ".so")
 
-    target_include_directories(actp PRIVATE
-            ${CMAKE_CURRENT_SOURCE_DIR}/src
-            ${freesteel_src}
-            )
+target_include_directories(actp PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${freesteel_src}
+        )
 
+target_link_libraries(actp ${PYTHON_LIBRARIES})
 
-    target_link_libraries(actp ${PYTHON_LIBRARIES})
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-# Build python wrapper
-
-
-ENDIF(PYTHONLIBS_FOUND)
-
-
-
-#
-#set(SOURCES_files_python_actp
-#        #freesteel-python.cpp
-#        #FreesteelPython.h
-#        FreesteelPython_wrap.cxx
-#        )
-#
-#source_group("actp_SOURCE" FILES ${SOURCES_files_python_actp})
-#
-#set(SOURCES_actp
-#        ${SOURCES_files_python_actp}
-#        )
-#
-#
-#set(actp
-#        #${Boost_LIBRARIES}
-#        ${PYTHON_LIBRARIES}
-#        libfreesteel.a
-#        )
-#
-#
-#add_library(
-#        actp
-#        MODULE
-#        ${SOURCES_actp}
-#        #${PYTHON_LIBRARIES}
-#
-#)
-#
-#target_include_directories(actp PRIVATE
-#        ${CMAKE_CURRENT_SOURCE_DIR}/python
-#        )
-#
-## add python
-#target_link_libraries(actp ${actp_libs})
+install(FILES ${BUILD_DIR}/actp.so DESTINATION ${ACTP_INSTALL_DIRECTORY} )
