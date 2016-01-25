@@ -127,9 +127,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 
   set(SOURCES_files_python_actp
-    freesteel-python.cpp
-    freesteel-python.h
-    freesteel-python_wrap.cxx
+    #freesteel-python.cpp
+    #FreesteelPython.h
+    FreesteelPython_wrap.cxx
   )
 
     source_group("actp_SOURCE" FILES ${SOURCES_files_python_actp})
@@ -143,7 +143,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 #    set(actp
 #        #${Boost_LIBRARIES}
 #        ${PYTHON_LIBRARIES}
-#        freesteel
+#        libfreesteel.a
 #    )
 #
     add_library(
